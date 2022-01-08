@@ -7,7 +7,6 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
-//commit
 export const SignUp = () => {
   //APIからのレスポンスを受け取り、受け取ったステータスコードによって状況を伝える
   const handleError = async (res) => {
