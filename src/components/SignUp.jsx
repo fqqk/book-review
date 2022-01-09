@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+// import { Review } from "./Review";
 
 export const SignUp = () => {
   //APIからのレスポンスを受け取り、受け取ったステータスコードによって状況を伝える
@@ -25,14 +26,21 @@ export const SignUp = () => {
         alert(resJson.ErrorMessageJP);
         break;
       default:
-        console.log(resJson.token);
-        alert("登録完了");
+        // console.log(resJson.token);
+        localStorage.setItem("token", resJson.token);
+        alert("登録完了。ログインしています");
+        // redirect();
         break;
     }
   };
 
+  // const [isLogin, setIsLogin] = useState(false);
+  // const redirect = () => {
+  //   setIsLogin(true);
+  // };
+
   //APIのURL
-  const BASE_URL = "http://api-for-missions-and-railways.herokuapp.com/users";
+  const BASE_URL = "https://api-for-missions-and-railways.herokuapp.com/users";
 
   //react hook formの
   const {
@@ -63,7 +71,6 @@ export const SignUp = () => {
       //bodyにjsonオブジェクトをJSON文字列化して指定
       body: JSON.stringify(json),
     });
-    console.log(JSON.stringify(json));
     reset();
     return handleError(res);
   };
@@ -113,13 +120,15 @@ export const SignUp = () => {
         </Box>
         <Stack spacing={2} direction="row">
           <Button type="submit" variant="contained">
-            ユーザー作成
+            ユーザー登録
           </Button>
         </Stack>
       </form>
 
       <p>これはサインアップコンポーネントです</p>
       <Link to="/login">ログイン</Link>
+
+      {/* {isLogin ? <Navigate to="/" /> : null} */}
     </div>
   );
 };

@@ -13,7 +13,6 @@ export const App = () => {
   return (
     <div>
       <h1>hello</h1>
-
       <BrowserRouter>
         <Link to="signup">まずはサインイン</Link>
         <Routes>

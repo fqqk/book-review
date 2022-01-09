@@ -6,6 +6,11 @@ import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 
 //material uiのstyle
 const Item = styled(Paper)(({ theme }) => ({
@@ -27,13 +32,15 @@ const reviewStyle = {
 
 export const Review = () => {
   const [books, setBooks] = useState([]);
+  const [users, setUsers] = useState("");
+  const [isLogin, setIsLogin] = useState(false);
 
-  const BASE_URL = "http://api-for-missions-and-railways.herokuapp.com/books";
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDE3MTIyNjQsImlhdCI6IjIwMjItMDEtMDhUMDc6MTE6MDQuODA5NDQ1OTVaIiwic3ViIjoiNTQ1NDY1NTczNTQiLCJ1c2VyX2lkIjoiNDAwNjI1ZDctMzVkMy00OTg2LWI2MmEtNDY0ODg2ZDE0ZTAwIn0.3vb6r4InYHxXqGGvig6_H-xlEuJi8Ov9XPonIZjlaK4";
+  const BOOKS_URL = "https://api-for-missions-and-railways.herokuapp.com/books";
+  const USERS_URL = "https://api-for-missions-and-railways.herokuapp.com/users";
+  const token = localStorage.getItem("token");
 
   const getBook = async () => {
-    const res = await fetch(BASE_URL, {
+    const res = await fetch(BOOKS_URL, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -41,12 +48,28 @@ export const Review = () => {
     });
     const data = await res.json();
     setBooks(data);
-    console.log(books);
+  };
+
+  const getUser = async () => {
+    const res = await fetch(USERS_URL, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res.json();
+    setUsers(data.name);
+    setIsLogin(true);
+  };
+
+  const localClear = () => {
+    localStorage.clear();
   };
 
   useEffect(() => {
     getBook();
-  }, [setBooks]);
+    getUser();
+  }, [token]);
 
   //mapの記述方法。books.map((book) => { return ~ }); / books.map((book) => ());コールバック関数の中身が処理なのか、値なのかという違い
   const BookReview = books.map((book) => (
@@ -65,6 +88,21 @@ export const Review = () => {
 
   return (
     <div>
+      <button onClick={localClear}>ローカルストレージをクリア</button>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              書籍レビューアプリ
+            </Typography>
+            {isLogin ? (
+              <Typography>{users}</Typography>
+            ) : (
+              <Button color="inherit">Login</Button>
+            )}
+          </Toolbar>
+        </AppBar>
+      </Box>
       <Container maxWidth="md" sx={{ bgcolor: "#cfe8fc" }}>
         <h1 className="text-red-400">書籍レビュー画面だよ〜</h1>
         {BookReview}

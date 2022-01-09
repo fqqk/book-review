@@ -24,13 +24,15 @@ export const Login = () => {
         alert(resJson.ErrorMessageJP);
         break;
       default:
-        console.log(resJson.token);
+        localStorage.setItem("token", resJson.token);
+        const token = localStorage.getItem("token");
+        console.log(token); //ローカルストレージに保存完了
         alert("ログイン成功");
         break;
     }
   };
 
-  const BASE_URL = "http://api-for-missions-and-railways.herokuapp.com/signin";
+  const BASE_URL = "https://api-for-missions-and-railways.herokuapp.com/signin";
 
   const {
     register,
@@ -98,7 +100,7 @@ export const Login = () => {
       </form>
 
       <p>これはログインコンポーネントです</p>
-      <Link to="/signup">サインイン</Link>
+      <Link to="/signup">ユーザー登録がまだの方はこちら</Link>
     </div>
   );
 };
