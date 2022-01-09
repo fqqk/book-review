@@ -1,6 +1,7 @@
 import React from "react";
+import { useState } from "react";
 import "../style/Login.css";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
@@ -26,10 +27,15 @@ export const Login = () => {
       default:
         localStorage.setItem("token", resJson.token);
         const token = localStorage.getItem("token");
-        console.log(token); //ローカルストレージに保存完了
-        alert("ログイン成功");
+        alert("ログイン成功。レビューページへリダイレクトします");
+        redirect();
         break;
     }
+  };
+
+  const [isLogin, setIsLogin] = useState(false);
+  const redirect = () => {
+    setIsLogin(true);
   };
 
   const BASE_URL = "https://api-for-missions-and-railways.herokuapp.com/signin";
@@ -101,6 +107,7 @@ export const Login = () => {
 
       <p>これはログインコンポーネントです</p>
       <Link to="/signup">ユーザー登録がまだの方はこちら</Link>
+      {isLogin && <Navigate to="/" />}
     </div>
   );
 };
