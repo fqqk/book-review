@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
+import { Link, Navigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
 import { styled } from "@mui/material/styles";
@@ -64,12 +65,13 @@ export const Review = () => {
 
   const localClear = () => {
     localStorage.clear();
+    setIsLogin(false);
   };
 
   useEffect(() => {
     getBook();
     getUser();
-  }, [token]);
+  }, [isLogin]);
 
   //mapの記述方法。books.map((book) => { return ~ }); / books.map((book) => ());コールバック関数の中身が処理なのか、値なのかという違い
   const BookReview = books.map((book) => (
@@ -88,7 +90,9 @@ export const Review = () => {
 
   return (
     <div>
-      <button onClick={localClear}>ローカルストレージをクリア</button>
+      <button onClick={localClear}>
+        ローカルストレージをクリア(ログアウト)
+      </button>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar>
@@ -98,14 +102,21 @@ export const Review = () => {
             {isLogin ? (
               <Typography>{users}</Typography>
             ) : (
-              <Button color="inherit">Login</Button>
+              <Button color="inherit">
+                <Link
+                  to="/login"
+                  style={{ textDecoration: "none", color: "white" }}
+                >
+                  ログイン
+                </Link>
+              </Button>
             )}
           </Toolbar>
         </AppBar>
       </Box>
       <Container maxWidth="md" sx={{ bgcolor: "#cfe8fc" }}>
         <h1 className="text-red-400">書籍レビュー画面だよ〜</h1>
-        {BookReview}
+        {isLogin && BookReview}
       </Container>
     </div>
   );

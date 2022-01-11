@@ -7,7 +7,6 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-// import { Review } from "./Review";
 
 export const SignUp = () => {
   //APIからのレスポンスを受け取り、受け取ったステータスコードによって状況を伝える
@@ -27,7 +26,6 @@ export const SignUp = () => {
         alert(resJson.ErrorMessageJP);
         break;
       default:
-        // console.log(resJson.token);
         localStorage.setItem("token", resJson.token);
         alert("登録完了。レビューページへリダイレクトします");
         redirect();
@@ -36,12 +34,10 @@ export const SignUp = () => {
   };
 
   const [isLogin, setIsLogin] = useState(false);
+
   const redirect = () => {
     setIsLogin(true);
   };
-
-  //APIのURL
-  const BASE_URL = "https://api-for-missions-and-railways.herokuapp.com/users";
 
   //react hook formの
   const {
@@ -59,6 +55,9 @@ export const SignUp = () => {
     },
   });
 
+  //APIのURL
+  const BASE_URL = "https://api-for-missions-and-railways.herokuapp.com/users";
+
   const SignUp = async (data) => {
     const json = {
       name: data.name,
@@ -75,6 +74,14 @@ export const SignUp = () => {
     reset();
     return handleError(res);
   };
+
+  // const pageNavigation = () => {
+  //   if (isLogin) {
+  //     return <Navigate to="/" />;
+  //   } else {
+  //     return <Navigate to="/signup" />;
+  //   }
+  // };
 
   return (
     <div className="sign_in">

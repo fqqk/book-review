@@ -26,7 +26,7 @@ export const Login = () => {
         break;
       default:
         localStorage.setItem("token", resJson.token);
-        const token = localStorage.getItem("token");
+        // const token = localStorage.getItem("token");
         alert("ログイン成功。レビューページへリダイレクトします");
         redirect();
         break;
