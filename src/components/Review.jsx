@@ -1,17 +1,12 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { Header } from "./Header";
 
 //material uiのstyle
 const Item = styled(Paper)(({ theme }) => ({
@@ -93,27 +88,7 @@ export const Review = () => {
       <button onClick={localClear}>
         ローカルストレージをクリア(ログアウト)
       </button>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              書籍レビューアプリ
-            </Typography>
-            {isLogin ? (
-              <Typography>{users}</Typography>
-            ) : (
-              <Button color="inherit">
-                <Link
-                  to="/login"
-                  style={{ textDecoration: "none", color: "white" }}
-                >
-                  ログイン
-                </Link>
-              </Button>
-            )}
-          </Toolbar>
-        </AppBar>
-      </Box>
+      <Header isLogin={isLogin} users={users} />
       <Container maxWidth="md" sx={{ bgcolor: "#cfe8fc" }}>
         <h1 className="text-red-400">書籍レビュー画面だよ〜</h1>
         {isLogin && BookReview}

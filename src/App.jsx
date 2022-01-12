@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 import "./style/App.css";
-import { BrowserRouter, Route, Routes, Link, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 //コンポーネントのimport
 import { Login } from "./components/Login";
@@ -45,16 +45,11 @@ export const App = () => {
 
   return (
     <BrowserRouter>
-      <div>
-        <Link to="/">Review</Link>
-        <br />
-        <Link to="/signup">まずはサインイン</Link>
-        <Routes>
-          <Route path="/signup" element={<AuthJudge></AuthJudge>} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<RequireAuth></RequireAuth>} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/signup" element={<AuthJudge></AuthJudge>} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<RequireAuth></RequireAuth>} />
+      </Routes>
     </BrowserRouter>
   );
 };
