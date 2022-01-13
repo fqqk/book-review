@@ -68,6 +68,8 @@ export const Review = (props) => {
     navigate("/login");
   };
 
+  const onClickAddReview = () => navigate("/new");
+
   useEffect(() => {
     getBook();
     getUser();
@@ -77,7 +79,7 @@ export const Review = (props) => {
   //mapの記述方法。books.map((book) => { return ~ }); / books.map((book) => ());コールバック関数の中身が処理なのか、値なのかという違い
   const BookReview = books.map((book) => (
     <div key={book}>
-      <a style={titleStyle} href={book.url}>
+      <a style={titleStyle} href={book.url} target="_blank">
         {book.title}
       </a>
       <Stack style={{ marginTop: "15px" }} direction="row" spacing={2}>
@@ -92,10 +94,10 @@ export const Review = (props) => {
   return (
     <div>
       <Header isLogin={isLogin} users={users} localClear={localClear} />
-      <Container maxWidth="md" sx={{ bgcolor: "#cfe8fc" }}>
-        <h1 className="text-red-400">書籍レビュー画面だよ〜</h1>
+      <Container maxWidth="md" sx={{ bgcolor: "#cfe8fc", marginTop: "20px" }}>
         {isLogin && BookReview}
       </Container>
+      <button onClick={onClickAddReview}>書籍投稿する</button>
     </div>
   );
 };
