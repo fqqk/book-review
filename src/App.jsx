@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useState } from "react";
 import "./style/App.css";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
@@ -7,48 +6,48 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { Login } from "./components/Login";
 import { SignUp } from "./components/SignUp";
 import { Review } from "./components/Review";
+import { Profile } from "./components/Profile";
 
 //関数コンポーネントはJSXを返す関数
 
 export const App = () => {
-  const [auth, setAuth] = useState(false);
-
   function RequireAuth() {
     const token = localStorage.getItem("token");
     if (token) {
-      Authorization(token);
       return <Review />;
     } else {
-      Authorization(token);
       return <Navigate to="/login" />;
     }
   }
 
-  function AuthJudge() {
+  function RequireAuthSignUp() {
     const token = localStorage.getItem("token");
     if (token) {
-      Authorization(token);
       return <Navigate to="/" />;
     } else {
-      Authorization(token);
       return <SignUp />;
     }
   }
 
-  const Authorization = (token) => {
+  function RequireAuthLogin() {
+    const token = localStorage.getItem("token");
     if (token) {
-      setAuth(true);
+      return <Navigate to="/" />;
     } else {
-      setAuth(false);
+      return <Login />;
     }
-  };
+  }
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/signup" element={<AuthJudge></AuthJudge>} />
-        <Route path="/login" element={<Login />} />
+        <Route
+          path="/signup"
+          element={<RequireAuthSignUp></RequireAuthSignUp>}
+        />
+        <Route path="/login" element={<RequireAuthLogin></RequireAuthLogin>} />
         <Route path="/" element={<RequireAuth></RequireAuth>} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );

@@ -37,6 +37,7 @@ export const SignUp = () => {
 
   const redirect = () => {
     setIsLogin(true);
+    console.log(isLogin);
   };
 
   //react hook formの
@@ -74,14 +75,6 @@ export const SignUp = () => {
     reset();
     return handleError(res);
   };
-
-  // const pageNavigation = () => {
-  //   if (isLogin) {
-  //     return <Navigate to="/" />;
-  //   } else {
-  //     return <Navigate to="/signup" />;
-  //   }
-  // };
 
   return (
     <div className="sign_in">

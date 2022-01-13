@@ -1,4 +1,3 @@
-import React from "react";
 import { useState } from "react";
 import "../style/Login.css";
 import { Link, Navigate } from "react-router-dom";
@@ -26,16 +25,18 @@ export const Login = () => {
         break;
       default:
         localStorage.setItem("token", resJson.token);
-        // const token = localStorage.getItem("token");
-        alert("ログイン成功。レビューページへリダイレクトします");
         redirect();
+        alert("ログイン成功。レビューページへリダイレクトします");
+        reset();
         break;
     }
   };
 
   const [isLogin, setIsLogin] = useState(false);
+
   const redirect = () => {
     setIsLogin(true);
+    console.log(isLogin);
   };
 
   const BASE_URL = "https://api-for-missions-and-railways.herokuapp.com/signin";
@@ -59,8 +60,6 @@ export const Login = () => {
       //bodyにjsonオブジェクトをJSON文字列化して指定
       body: JSON.stringify(json),
     });
-    console.log(JSON.stringify(json));
-    reset();
     return handleError(res);
   };
 

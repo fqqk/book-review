@@ -7,6 +7,7 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import { Header } from "./Header";
+import { useNavigate } from "react-router";
 
 //material uiのstyle
 const Item = styled(Paper)(({ theme }) => ({
@@ -26,7 +27,7 @@ const reviewStyle = {
   marginBottom: "70px",
 };
 
-export const Review = () => {
+export const Review = (props) => {
   const [books, setBooks] = useState([]);
   const [users, setUsers] = useState("");
   const [isLogin, setIsLogin] = useState(false);
@@ -34,6 +35,8 @@ export const Review = () => {
   const BOOKS_URL = "https://api-for-missions-and-railways.herokuapp.com/books";
   const USERS_URL = "https://api-for-missions-and-railways.herokuapp.com/users";
   const token = localStorage.getItem("token");
+
+  const navigate = useNavigate();
 
   const getBook = async () => {
     const res = await fetch(BOOKS_URL, {
@@ -61,11 +64,14 @@ export const Review = () => {
   const localClear = () => {
     localStorage.clear();
     setIsLogin(false);
+    alert("ログアウトされました。ログイン画面へ移動します");
+    navigate("/login");
   };
 
   useEffect(() => {
     getBook();
     getUser();
+    console.log(isLogin);
   }, [isLogin]);
 
   //mapの記述方法。books.map((book) => { return ~ }); / books.map((book) => ());コールバック関数の中身が処理なのか、値なのかという違い
@@ -85,10 +91,7 @@ export const Review = () => {
 
   return (
     <div>
-      <button onClick={localClear}>
-        ローカルストレージをクリア(ログアウト)
-      </button>
-      <Header isLogin={isLogin} users={users} />
+      <Header isLogin={isLogin} users={users} localClear={localClear} />
       <Container maxWidth="md" sx={{ bgcolor: "#cfe8fc" }}>
         <h1 className="text-red-400">書籍レビュー画面だよ〜</h1>
         {isLogin && BookReview}
