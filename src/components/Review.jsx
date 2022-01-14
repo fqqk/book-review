@@ -78,7 +78,12 @@ export const Review = (props) => {
 
   //mapの記述方法。books.map((book) => { return ~ }); / books.map((book) => ());コールバック関数の中身が処理なのか、値なのかという違い
   const BookReview = books.map((book) => (
-    <div key={book}>
+    <Paper
+      elevation={3}
+      key={book}
+      onClick={() => navigate(`detail/${book.id}`, { state: { id: book.id } })}
+      style={{ margin: "50px", cursor: "pointer" }}
+    >
       <a style={titleStyle} href={book.url} target="_blank">
         {book.title}
       </a>
@@ -88,7 +93,7 @@ export const Review = (props) => {
           <Item>{book.review}</Item>
         </Grid>
       </Stack>
-    </div>
+    </Paper>
   ));
 
   return (

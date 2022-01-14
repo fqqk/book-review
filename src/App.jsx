@@ -8,6 +8,7 @@ import { SignUp } from "./components/SignUp";
 import { Review } from "./components/Review";
 import { Profile } from "./components/Profile";
 import { AddReview } from "./components/addReview";
+import { Detail } from "./components/Detail";
 
 //関数コンポーネントはJSXを返す関数
 
@@ -50,6 +51,7 @@ export const App = () => {
         <Route path="/" element={<RequireAuth></RequireAuth>} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/new" element={<AddReview />} />
+        <Route path="/detail/:id" element={<Detail />} />
       </Routes>
     </BrowserRouter>
   );
