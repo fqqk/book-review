@@ -78,22 +78,45 @@ export const Review = () => {
 
   //mapの記述方法。books.map((book) => { return ~ }); / books.map((book) => ());コールバック関数の中身が処理なのか、値なのかという違い
   const BookReview = books.map((book) => (
-    <Paper
-      elevation={3}
-      key={book}
-      onClick={() => navigate(`detail/${book.id}`, { state: { id: book.id } })}
-      style={{ margin: "50px", cursor: "pointer" }}
-    >
-      <a style={titleStyle} href={book.url} target="_blank">
-        {book.title}
-      </a>
-      <Stack style={{ marginTop: "15px" }} direction="row" spacing={2}>
-        <Avatar>{book.reviewer}</Avatar>
-        <Grid item xs={12} style={reviewStyle}>
-          <Item>{book.review}</Item>
-        </Grid>
-      </Stack>
-    </Paper>
+    <Stack>
+      <Paper
+        elevation={3}
+        key={book}
+        onClick={() =>
+          navigate(`/detail/${book.id}`, { state: { id: book.id } })
+        }
+        style={{ margin: "50px", cursor: "pointer" }}
+      >
+        <a style={titleStyle} href={book.url} target="_blank">
+          {book.title}
+        </a>
+        <Stack style={{ marginTop: "15px" }} direction="row" spacing={2}>
+          <Avatar>{book.reviewer}</Avatar>
+          <Grid item xs={12} style={reviewStyle}>
+            <Item>{book.review}</Item>
+          </Grid>
+        </Stack>
+      </Paper>
+      {book.isMine ? (
+        <button
+          onClick={() =>
+            navigate(`/edit/${book.id}`, {
+              state: {
+                id: book.id,
+                title: book.title,
+                url: book.url,
+                detail: book.detail,
+                review: book.review,
+              },
+            })
+          }
+        >
+          書籍更新
+        </button>
+      ) : (
+        false
+      )}
+    </Stack>
   ));
 
   return (
