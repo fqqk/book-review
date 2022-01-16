@@ -10,6 +10,7 @@ export const Detail = () => {
   const token = localStorage.getItem("token");
 
   const [detail, setDetail] = useState([]);
+  const [isLoad, setIsLoad] = useState(false);
 
   const handleError = async (res) => {
     const resJson = await res.json();
@@ -42,7 +43,7 @@ export const Detail = () => {
 
     const data = await res.json();
     setDetail(data);
-    console.log(data);
+    setIsLoad(true);
     return handleError(res);
   };
 
@@ -54,7 +55,7 @@ export const Detail = () => {
     <div>
       <h1>詳細画面</h1>
       <Box sx={{ display: "flex" }}>
-        {detail ? (
+        {isLoad ? (
           <div>
             <p>{detail.title}</p>
             <p>{detail.url}</p>

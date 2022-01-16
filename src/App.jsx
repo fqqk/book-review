@@ -1,5 +1,4 @@
 import * as React from "react";
-import "./style/App.css";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 //コンポーネントのimport
@@ -9,10 +8,12 @@ import { Review } from "./components/Review";
 import { Profile } from "./components/Profile";
 import { AddReview } from "./components/addReview";
 import { Detail } from "./components/Detail";
+import { Edit } from "./components/Edit";
 
 //関数コンポーネントはJSXを返す関数
 
 export const App = () => {
+  //認証の状態によってアクセス制御
   function RequireAuth() {
     const token = localStorage.getItem("token");
     if (token) {
@@ -52,6 +53,7 @@ export const App = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/new" element={<AddReview />} />
         <Route path="/detail/:id" element={<Detail />} />
+        <Route path="/edit/:id" element={<Edit />} />
       </Routes>
     </BrowserRouter>
   );

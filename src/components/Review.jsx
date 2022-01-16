@@ -27,7 +27,7 @@ const reviewStyle = {
   marginBottom: "70px",
 };
 
-export const Review = (props) => {
+export const Review = () => {
   const [books, setBooks] = useState([]);
   const [users, setUsers] = useState("");
   const [isLogin, setIsLogin] = useState(false);

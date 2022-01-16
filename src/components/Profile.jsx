@@ -9,10 +9,7 @@ import { useNavigate } from "react-router";
 
 export const Profile = () => {
   const { state } = useLocation();
-  console.log(state.users);
-
   const navigate = useNavigate();
-
   const USERS_URL = "https://api-for-missions-and-railways.herokuapp.com/users";
   const token = localStorage.getItem("token");
 
@@ -49,7 +46,7 @@ export const Profile = () => {
     return handleError(res);
   };
 
-  //react hook formの
+  //react hook form
   const {
     register,
     handleSubmit,
@@ -62,6 +59,7 @@ export const Profile = () => {
     },
   });
 
+  //ログイン状態でレビューボタン押した場合
   const onClickReview = () => navigate("/");
 
   return (
