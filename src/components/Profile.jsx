@@ -1,11 +1,11 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import { useNavigate } from "react-router";
+import styled from "styled-components";
+import { SecondaryButton } from "./atoms/button/SecondaryButton";
 
 export const Profile = () => {
   const { state } = useLocation();
@@ -64,18 +64,10 @@ export const Profile = () => {
 
   return (
     <>
-      <button onClick={onClickReview}>Review</button>
       <form className="form" onSubmit={handleSubmit(updateUser)}>
-        <Box
-          component="form"
-          sx={{
-            m: 5,
-            mx: "auto",
-            width: "25ch",
-          }}
-        >
+        <SContainer>
           <TextField
-            fullWidth={true}
+            sx={{ width: 200 }}
             id="name"
             label="name"
             variant="standard"
@@ -83,13 +75,20 @@ export const Profile = () => {
             {...register("name", { required: true })}
           />
           {errors.name && "名前が入力されていません"}
-        </Box>
+        </SContainer>
+
         <Stack spacing={2} direction="row">
-          <Button type="submit" variant="contained">
-            編集
-          </Button>
+          <SecondaryButton onClick={onClickReview}>Review</SecondaryButton>
+          <SecondaryButton type="submit">編集</SecondaryButton>
         </Stack>
       </form>
     </>
   );
 };
+
+const SContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0;
+`;

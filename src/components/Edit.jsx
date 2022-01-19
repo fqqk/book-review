@@ -1,13 +1,14 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useLocation } from "react-router";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
+import styled from "styled-components";
+import { SecondaryButton } from "./atoms/button/SecondaryButton";
+import { useNavigate } from "react-router";
 
 export const Edit = () => {
+  const navigate = useNavigate();
   const { state } = useLocation();
   const { id, title, url, detail, review } = state;
   const BOOKS_URL = `https://api-for-missions-and-railways.herokuapp.com/books/${id}`;
@@ -29,7 +30,7 @@ export const Edit = () => {
         alert(resJson.ErrorMessageJP);
         break;
       default:
-        alert("書籍更新完了。");
+        alert("書籍更新完了。レビューページへ移動します");
         break;
     }
   };
@@ -54,11 +55,11 @@ export const Edit = () => {
 
   const {
     register,
-    handleSubmit,
+    handleSubmit, //バリデーションの成否を確認→trueの場合、削除ボタンを押しても実行されてしまう
     formState: { errors },
     reset, //フォームを空にする
   } = useForm({
-    mode: "onSubmit", // バリデーションが実行されるタイミング
+    mode: "onSubmt", // バリデーションが実行されるタイミング
     defaultValues: {
       // 初回レンダリング時のフォームのデフォルト値
       title: `${title}`,
@@ -82,78 +83,95 @@ export const Edit = () => {
         Authorization: `Bearer ${token}`,
       },
     });
-
     handleError(res);
+    console.log("handleError");
+    setTimeout(() => {
+      navigate("/");
+    }, 3000);
   };
 
   const onClickDelete = async () => {
-    alert("本当に削除しますか？");
-    const res = await fetch(BOOKS_URL, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (res.status === 200) {
-      alert("削除成功");
-    } else {
-      handleErrorDelete(res);
+    if (window.confirm("本当に削除しますか？")) {
+      const res = await fetch(BOOKS_URL, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.status === 200) {
+        alert("削除成功。レビューページへ移動します");
+        console.log("handleDeleteError");
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
+      } else {
+        handleErrorDelete(res);
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
+      }
     }
   };
 
   return (
     <div>
       <form className="form" onSubmit={handleSubmit(updateBook)}>
-        <Box
-          component="form"
-          sx={{
-            m: 5,
-            mx: "auto",
-            width: "25ch",
-          }}
-        >
+        <SContainer>
           <TextField
-            fullWidth={true}
+            sx={{ width: 200 }}
             id="title"
-            label="title"
+            label="タイトル"
             variant="standard"
             type="text"
             {...register("title", { required: true })}
           />
-          {errors.title && "titleが入力されていません"}
+          {errors.title && "タイトルが入力されていません"}
           <TextField
-            fullWidth={true}
+            sx={{ width: 400 }}
             id="url"
             label="url"
             variant="standard"
-            type="text"
-            {...register("url", { required: true })}
+            type="url"
+            {...register("url", {
+              required: true,
+              pattern: /https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+/g,
+            })}
           />
-          {errors.url && "urlが入力されていません"}
-          <TextareaAutosize
-            minRows={3}
-            placeholder="詳細について"
-            style={{ width: 300 }}
+          {errors.url && "urlを追加してください"}
+          <TextField
+            label="詳細"
+            multiline
+            rows={4}
+            defaultValue=""
             {...register("detail", { required: true })}
+            sx={{ width: 500, m: "20px 0" }}
           />
           {errors.detail && "詳細が入力されていません"}
-          <TextareaAutosize
-            minRows={3}
-            placeholder="レビュー"
-            style={{ width: 300 }}
+          <TextField
+            label="レビュー"
+            multiline
+            rows={4}
+            defaultValue=""
             {...register("review", { required: true })}
+            sx={{ width: 500, m: "20px 0" }}
           />
           {errors.review && "レビューが入力されていません"}
-        </Box>
+        </SContainer>
+
         <Stack spacing={2} direction="row">
-          <Button type="submit" variant="contained">
-            更新
-          </Button>
-          <Button variant="contained" onClick={onClickDelete}>
+          <SecondaryButton type="reset" onClick={onClickDelete}>
             削除
-          </Button>
+          </SecondaryButton>
+          <SecondaryButton type="submit">更新</SecondaryButton>
         </Stack>
       </form>
     </div>
   );
 };
+
+const SContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0;
+`;

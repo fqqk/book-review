@@ -1,11 +1,10 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
 import { useNavigate } from "react-router";
+import styled from "styled-components";
+import { SecondaryButton } from "./atoms/button/SecondaryButton";
 
 export const AddReview = () => {
   const BOOKS_URL = "https://api-for-missions-and-railways.herokuapp.com/books";
@@ -29,6 +28,7 @@ export const AddReview = () => {
         break;
       default:
         alert("書籍投稿完了。");
+        reset();
         break;
     }
   };
@@ -71,18 +71,10 @@ export const AddReview = () => {
 
   return (
     <>
-      <button onClick={onClickReview}>Review</button>
       <form className="form" onSubmit={handleSubmit(addBook)}>
-        <Box
-          component="form"
-          sx={{
-            m: 10,
-            mx: "auto",
-            width: "25ch",
-          }}
-        >
+        <SContainer>
           <TextField
-            fullWidth={true}
+            sx={{ width: 200 }}
             id="title"
             label="タイトル"
             variant="standard"
@@ -91,38 +83,51 @@ export const AddReview = () => {
           />
           {errors.title && "タイトルが入力されていません"}
           <TextField
-            fullWidth={true}
+            sx={{ width: 400 }}
             id="url"
             label="url"
             variant="standard"
-            type="email"
+            type="url"
             {...register("url", {
               required: true,
-              //   pattern: /https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+/g,
+              pattern: /https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+/g,
             })}
           />
           {errors.url && "urlを追加してください"}
-          <TextareaAutosize
-            minRows={3}
-            placeholder="詳細について"
-            style={{ width: 300 }}
+          <TextField
+            label="詳細"
+            multiline
+            rows={4}
+            defaultValue=""
             {...register("detail", { required: true })}
+            sx={{ width: 500, m: "20px 0" }}
           />
           {errors.detail && "詳細が入力されていません"}
-          <TextareaAutosize
-            minRows={3}
-            placeholder="レビュー"
-            style={{ width: 300 }}
+          <TextField
+            label="レビュー"
+            multiline
+            rows={4}
+            defaultValue=""
             {...register("review", { required: true })}
+            sx={{ width: 500, m: "20px 0" }}
           />
           {errors.review && "レビューが入力されていません"}
-        </Box>
+        </SContainer>
+
         <Stack spacing={2} direction="row">
-          <Button type="submit" variant="contained">
-            投稿
-          </Button>
+          <SecondaryButton sx={{}} onClick={onClickReview}>
+            Review
+          </SecondaryButton>
+          <SecondaryButton type="submit">投稿</SecondaryButton>
         </Stack>
       </form>
     </>
   );
 };
+
+const SContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0;
+`;

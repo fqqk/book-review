@@ -4,8 +4,8 @@ import { Link, Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import styled from "styled-components";
 
 export const Login = () => {
   const handleError = async (res) => {
@@ -26,8 +26,8 @@ export const Login = () => {
       default:
         localStorage.setItem("token", resJson.token);
         redirect();
-        alert("ログイン成功。レビューページへリダイレクトします");
         reset();
+        alert("ログイン成功");
         break;
     }
   };
@@ -42,8 +42,8 @@ export const Login = () => {
   const BASE_URL = "https://api-for-missions-and-railways.herokuapp.com/signin";
 
   const {
-    register,
-    handleSubmit,
+    register, //inputなどに入力されたデータを参照
+    handleSubmit, //ラップした関数にデータをオブジェクトの形で渡す
     formState: { errors },
     reset, //フォームを空にする
   } = useForm();
@@ -65,17 +65,10 @@ export const Login = () => {
 
   return (
     <div className="login">
-      <form className="form" onSubmit={handleSubmit(onLogin)}>
-        <Box
-          component="form"
-          sx={{
-            m: 5,
-            mx: "auto",
-            width: "25ch",
-          }}
-        >
+      <SContainer>
+        <form className="form" onSubmit={handleSubmit(onLogin)}>
           <TextField
-            fullWidth={true}
+            sx={{ width: 300, marginBottom: "10px" }}
             id="email"
             label="email"
             variant="standard"
@@ -88,7 +81,7 @@ export const Login = () => {
           />
           {errors.email && "example@gmail.comの形式で入力してください"}
           <TextField
-            fullWidth={true}
+            sx={{ width: 300, marginBottom: "40px" }}
             id="password"
             label="password"
             variant="standard"
@@ -96,17 +89,28 @@ export const Login = () => {
             {...register("password", { required: true, minLength: 6 })}
           />
           {errors.password && "パスワードは6文字以上です"}
-        </Box>
-        <Stack spacing={2} direction="row">
-          <Button type="submit" variant="contained">
-            ログイン
-          </Button>
-        </Stack>
-      </form>
 
-      <p>これはログインコンポーネントです</p>
-      <Link to="/signup">ユーザー登録がまだの方はこちら</Link>
-      {isLogin && <Navigate to="/" />}
+          <Stack spacing={2} direction="row">
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{ marginBottom: "30px" }}
+            >
+              ログイン
+            </Button>
+          </Stack>
+        </form>
+
+        <Link to="/signup">ユーザー登録がまだの方はこちら</Link>
+        {isLogin && <Navigate to="/" />}
+      </SContainer>
     </div>
   );
 };
+
+const SContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0;
+`;

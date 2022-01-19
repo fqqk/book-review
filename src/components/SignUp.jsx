@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import styled from "styled-components";
 
 export const SignUp = () => {
   //APIからのレスポンスを受け取り、受け取ったステータスコードによって状況を伝える
@@ -78,17 +79,10 @@ export const SignUp = () => {
 
   return (
     <div className="sign_in">
-      <form className="form" onSubmit={handleSubmit(SignUp)}>
-        <Box
-          component="form"
-          sx={{
-            m: 5,
-            mx: "auto",
-            width: "25ch",
-          }}
-        >
+      <SContainer>
+        <form className="form" onSubmit={handleSubmit(SignUp)}>
           <TextField
-            fullWidth={true}
+            sx={{ width: 300, marginBottom: "10px" }}
             id="name"
             label="name"
             variant="standard"
@@ -97,7 +91,7 @@ export const SignUp = () => {
           />
           {errors.name && "名前が入力されていません"}
           <TextField
-            fullWidth={true}
+            sx={{ width: 300, marginBottom: "10px" }}
             id="email"
             label="email"
             variant="standard"
@@ -110,7 +104,7 @@ export const SignUp = () => {
           />
           {errors.email && "example@gmail.comの形式で入力してください"}
           <TextField
-            fullWidth={true}
+            sx={{ width: 300, marginBottom: "40px" }}
             id="password"
             label="password"
             variant="standard"
@@ -118,17 +112,28 @@ export const SignUp = () => {
             {...register("password", { required: true, minLength: 6 })}
           />
           {errors.password && "パスワードは6文字以上です"}
-        </Box>
-        <Stack spacing={2} direction="row">
-          <Button type="submit" variant="contained">
-            ユーザー登録
-          </Button>
-        </Stack>
-      </form>
 
-      <p>これはサインアップコンポーネントです</p>
-      <Link to="/login">ログイン</Link>
-      {isLogin && <Navigate to="/" />}
+          <Stack spacing={2} direction="row">
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{ marginBottom: "30px" }}
+            >
+              ユーザー登録
+            </Button>
+          </Stack>
+        </form>
+
+        <Link to="/login">ログイン</Link>
+        {isLogin && <Navigate to="/" />}
+      </SContainer>
     </div>
   );
 };
+
+const SContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0;
+`;

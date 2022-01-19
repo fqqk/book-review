@@ -2,30 +2,11 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
-import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack";
 import { Header } from "./Header";
 import { useNavigate } from "react-router";
-
-//material uiのstyle
-const Item = styled(Paper)(({ theme }) => ({
-  ...theme.typography.body2,
-  padding: theme.spacing(3),
-  textAlign: "left",
-  color: theme.palette.text.secondary,
-}));
-
-const titleStyle = {
-  fontWeight: "bold",
-  textDecoration: "none",
-  fontSize: "1.3em",
-};
-
-const reviewStyle = {
-  marginBottom: "70px",
-};
+import { SecondaryButton } from "./atoms/button/SecondaryButton";
+import styled from "styled-components";
 
 export const Review = () => {
   const [books, setBooks] = useState([]);
@@ -78,54 +59,83 @@ export const Review = () => {
 
   //mapの記述方法。books.map((book) => { return ~ }); / books.map((book) => ());コールバック関数の中身が処理なのか、値なのかという違い
   const BookReview = books.map((book) => (
-    <Stack>
+    <div>
       <Paper
         elevation={3}
         key={book}
-        onClick={() =>
-          navigate(`/detail/${book.id}`, { state: { id: book.id } })
-        }
-        style={{ margin: "50px", cursor: "pointer" }}
+        style={{ margin: "30px", padding: "10px" }}
       >
-        <a style={titleStyle} href={book.url} target="_blank">
-          {book.title}
-        </a>
-        <Stack style={{ marginTop: "15px" }} direction="row" spacing={2}>
+        <p style={titleStyle}>{book.title}</p>
+        <SFlex>
           <Avatar>{book.reviewer}</Avatar>
-          <Grid item xs={12} style={reviewStyle}>
-            <Item>{book.review}</Item>
-          </Grid>
-        </Stack>
+          <SReview
+            onClick={() =>
+              navigate(`/detail/${book.id}`, { state: { id: book.id } })
+            }
+          >
+            {book.review}
+          </SReview>
+          {book.isMine ? (
+            <SecondaryButton
+              onClick={() =>
+                navigate(`/edit/${book.id}`, {
+                  state: {
+                    id: book.id,
+                    title: book.title,
+                    url: book.url,
+                    detail: book.detail,
+                    review: book.review,
+                  },
+                })
+              }
+            >
+              書籍更新
+            </SecondaryButton>
+          ) : (
+            false
+          )}
+        </SFlex>
       </Paper>
-      {book.isMine ? (
-        <button
-          onClick={() =>
-            navigate(`/edit/${book.id}`, {
-              state: {
-                id: book.id,
-                title: book.title,
-                url: book.url,
-                detail: book.detail,
-                review: book.review,
-              },
-            })
-          }
-        >
-          書籍更新
-        </button>
-      ) : (
-        false
-      )}
-    </Stack>
+    </div>
   ));
 
   return (
     <div>
       <Header isLogin={isLogin} users={users} localClear={localClear} />
-      <Container maxWidth="md" sx={{ bgcolor: "#cfe8fc", marginTop: "20px" }}>
+
+      <Container
+        maxWidth="md"
+        sx={{
+          bgcolor: "#bae8e8",
+          marginTop: "60px",
+          padding: "30px",
+        }}
+      >
         {isLogin && BookReview}
+        <FixedButton onClick={onClickAddReview}>投稿</FixedButton>
       </Container>
-      <button onClick={onClickAddReview}>書籍投稿する</button>
     </div>
   );
+};
+
+const SFlex = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const FixedButton = styled(SecondaryButton)`
+  position: fixed;
+  bottom: 20px;
+`;
+
+const SReview = styled.div`
+  font-size: 0.8em;
+  margin-left: 5px;
+  width: 80%;
+  cursor: pointer;
+`;
+
+const titleStyle = {
+  fontWeight: "bold",
+  color: "#2d334a",
 };
