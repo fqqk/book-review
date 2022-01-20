@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation } from "react-router";
 import TextField from "@mui/material/TextField";
@@ -13,6 +13,7 @@ export const Edit = () => {
   const { id, title, url, detail, review } = state;
   const BOOKS_URL = `https://api-for-missions-and-railways.herokuapp.com/books/${id}`;
   const token = localStorage.getItem("token");
+  const [isDelete, setIsDelete] = useState(false);
 
   const handleError = async (res) => {
     const resJson = await res.json();
@@ -31,6 +32,10 @@ export const Edit = () => {
         break;
       default:
         alert("書籍更新完了。レビューページへ移動します");
+        reset();
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
         break;
     }
   };
@@ -59,7 +64,7 @@ export const Edit = () => {
     formState: { errors },
     reset, //フォームを空にする
   } = useForm({
-    mode: "onSubmt", // バリデーションが実行されるタイミング
+    mode: "onSubmit", // バリデーションが実行されるタイミング
     defaultValues: {
       // 初回レンダリング時のフォームのデフォルト値
       title: `${title}`,
@@ -85,9 +90,6 @@ export const Edit = () => {
     });
     handleError(res);
     console.log("handleError");
-    setTimeout(() => {
-      navigate("/");
-    }, 3000);
   };
 
   const onClickDelete = async () => {
@@ -100,22 +102,37 @@ export const Edit = () => {
       });
       if (res.status === 200) {
         alert("削除成功。レビューページへ移動します");
+        reset();
         console.log("handleDeleteError");
         setTimeout(() => {
           navigate("/");
-        }, 3000);
+        }, 1000);
       } else {
         handleErrorDelete(res);
         setTimeout(() => {
           navigate("/");
-        }, 3000);
+        }, 1000);
       }
+    } else {
+      setIsDelete(false);
+      console.log(isDelete);
+    }
+  };
+
+  const onClickReview = () => navigate("/");
+
+  const switchFunc = (data) => {
+    console.log(isDelete);
+    if (isDelete) {
+      onClickDelete();
+    } else {
+      updateBook(data);
     }
   };
 
   return (
     <div>
-      <form className="form" onSubmit={handleSubmit(updateBook)}>
+      <form className="form" onSubmit={handleSubmit(switchFunc)}>
         <SContainer>
           <TextField
             sx={{ width: 200 }}
@@ -159,7 +176,8 @@ export const Edit = () => {
         </SContainer>
 
         <Stack spacing={2} direction="row">
-          <SecondaryButton type="reset" onClick={onClickDelete}>
+          <SecondaryButton onClick={onClickReview}>戻る</SecondaryButton>
+          <SecondaryButton onClick={() => setIsDelete(true)}>
             削除
           </SecondaryButton>
           <SecondaryButton type="submit">更新</SecondaryButton>
